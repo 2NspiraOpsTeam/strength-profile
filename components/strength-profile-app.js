@@ -77,7 +77,10 @@ export default function StrengthProfileApp() {
           <div className="card" style={{ padding: 28 }}>
             <div className="hero-grid" style={{ alignItems: 'center' }}>
               <div>
-                <div className="eyebrow">{BRAND.company}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                  <img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 42, height: 42, objectFit: 'contain' }} />
+                  <div className="eyebrow">{BRAND.company}</div>
+                </div>
                 <h1 className="hero-title">{BRAND.product}</h1>
                 <p className="muted" style={{ fontSize: 18, lineHeight: 1.85, maxWidth: 760 }}>{BRAND.subtagline}</p>
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 28 }}>
@@ -125,7 +128,7 @@ export default function StrengthProfileApp() {
           </div>
 
           <div className="card" style={{ padding: 28 }}>
-            <SectionHeader eyebrow="Your professional strengths profile" title={results.profile.label} description={results.profile.summary} actions={<Pill tone="green">Overall Score {results.overallScore}</Pill>} />
+            <SectionHeader eyebrow={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 28, height: 28, objectFit: 'contain' }} />Your professional strengths profile</span>} title={results.profile.label} description={results.profile.summary} actions={<Pill tone="green">Overall Score {results.overallScore}</Pill>} />
             <div className="two-col" style={{ marginTop: 22, alignItems: 'center' }}>
               <div className="three-col">
                 <StatCard label="Collaboration style" value={collaborationStyle.split(' — ')[0]} helper={collaborationStyle} />
