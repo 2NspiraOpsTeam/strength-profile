@@ -82,6 +82,7 @@ export default function StrengthProfileApp() {
                   <div className="eyebrow">{BRAND.company}</div>
                 </div>
                 <h1 className="hero-title">{BRAND.product}</h1>
+                <div className="badge" style={{ background: 'rgba(78,227,193,0.12)', color: '#c9fff4', marginBottom: 14 }}>{BRAND.tagline}</div>
                 <p className="muted" style={{ fontSize: 18, lineHeight: 1.85, maxWidth: 760 }}>{BRAND.subtagline}</p>
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 28 }}>
                   <button className="button-primary" onClick={() => setStarted(true)}>{BRAND.ctaPrimary}</button>
@@ -89,14 +90,14 @@ export default function StrengthProfileApp() {
                 </div>
               </div>
               <div className="panel" style={{ padding: 24 }}>
-                <div className="badge" style={{ background: 'rgba(78,227,193,0.12)', color: '#c9fff4' }}>{BRAND.tagline}</div>
+                <div className="eyebrow">Professional strengths and work-fit assessment</div>
                 <ul className="list-clean" style={{ marginTop: 16 }}>
                   {[
-                    'Identify your natural contribution style',
-                    'Understand what work energizes you',
-                    'See your collaboration pattern',
-                    'Learn where you are likely to thrive',
-                    'Get a practical work-fit profile',
+                    'Identify your natural operating strengths',
+                    'Understand what kinds of work give you energy',
+                    'See how you naturally collaborate and contribute',
+                    'Learn where you are most likely to thrive professionally',
+                    'Get a practical strengths and work-fit profile',
                   ].map((item) => (
                     <li key={item}><span className="dot" style={{ background: '#8b7dff' }} /><div className="muted" style={{ lineHeight: 1.65 }}>{item}</div></li>
                   ))}
@@ -106,8 +107,8 @@ export default function StrengthProfileApp() {
           </div>
 
           <div id="how-it-works" className="three-col">
-            <StatCard label="Assessment length" value="24 Questions" helper="Short enough to complete quickly, long enough to reveal meaningful professional patterns." />
-            <StatCard label="Output" value="Strength Profile" helper="Returns a work-oriented profile, energy drivers, friction zones, and collaboration guidance." />
+            <StatCard label="Assessment length" value="24 Questions" helper="Short enough to complete quickly, long enough to reveal meaningful operating patterns." />
+            <StatCard label="Output" value="Operating Strengths Profile" helper="Returns a work-oriented profile, energy drivers, friction zones, and collaboration guidance." />
             <StatCard label="Best for" value="Professionals" helper="Useful for self-awareness, role fit, career reflection, and leadership conversations." />
           </div>
         </div>
