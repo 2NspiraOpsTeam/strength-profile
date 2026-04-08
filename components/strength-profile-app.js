@@ -209,7 +209,8 @@ export default function StrengthProfileApp() {
 
   if (showResults) {
     const chartData = results.dimensions.map((item) => ({ subject: item.shortTitle, score: item.score }));
-    const contactHref = `mailto:${BRAND.contactEmail}?subject=${encodeURIComponent(BRAND.contactSubject)}&body=${encodeURIComponent(`Hello 2Nspira,\n\nI completed the Strength Profile and would like to discuss my results.\n\nName: ${profileInput.name || ''}\nRole: ${profileInput.role || ''}\nCareer Stage: ${profileInput.careerStage || ''}\nWork Context: ${profileInput.workContext || ''}\nGoal: ${profileInput.helpGoal || ''}\nWhat Drains Me: ${profileInput.whatDrainsYou || ''}\nEmail: ${profileInput.email || ''}\nPrimary Profile: ${results.profile.label}\nOverall Strength Score: ${results.overallScore}\nCollaboration Style: ${collaborationStyle}\n\nPlease follow up with me.\n`)}`;
+    const contactHref = `mailto:${BRAND.contactEmail}?subject=${encodeURIComponent(BRAND.contactSubject)}&body=${encodeURIComponent(`Hello 2Nspira,\n\nI completed the Strength Profile and would like to discuss my results.\n\nName: ${profileInput.name || ''}\nRole: ${profileInput.role || ''}\nCareer Stage: ${profileInput.careerStage || ''}\nWork Context: ${profileInput.workContext || ''}\nGoal: ${profileInput.helpGoal || ''}\nWhat Drains Me: ${profileInput.whatDrainsYou || ''}\nEmail: ${profileInput.email || ''}\nPrimary Profile: ${results.profile.label}\nOverall Strength Score: ${results.overallScore}\nTop Strengths: ${results.strongest.map((item) => item.title).join(', ')}\nCollaboration Style: ${collaborationStyle}\n\nPlease follow up with me.\n`)}`;
+    const reportRequestHref = `mailto:${BRAND.contactEmail}?subject=${encodeURIComponent('2Nspira Strength Profile Report Request')}&body=${encodeURIComponent(`Hello 2Nspira,\n\nPlease send me a follow-up regarding my Strength Profile results.\n\nName: ${profileInput.name || ''}\nRole: ${profileInput.role || ''}\nCareer Stage: ${profileInput.careerStage || ''}\nWork Context: ${profileInput.workContext || ''}\nGoal: ${profileInput.helpGoal || ''}\nWhat Drains Me: ${profileInput.whatDrainsYou || ''}\nEmail: ${profileInput.email || ''}\nPrimary Profile: ${results.profile.label}\nOverall Strength Score: ${results.overallScore}\nTop Strengths: ${results.strongest.map((item) => item.title).join(', ')}\n\nThank you.\n`)}`;
 
     return (
       <div className="page-shell">
@@ -296,9 +297,22 @@ export default function StrengthProfileApp() {
             <div className="panel" style={{ padding: 24 }}>
               <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 14 }}>2Nspira follow-up</div>
               <p className="muted" style={{ margin: 0, lineHeight: 1.75 }}>Use your profile as a starting point for role-fit reflection, manager conversations, coaching, or team development work.</p>
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 18 }}>
-                <a className="button-primary" href={contactHref}>Talk with 2Nspira</a>
-                <button className="button-secondary" onClick={() => window.print()}>Print / Save</button>
+              <div className="two-col" style={{ marginTop: 18 }}>
+                <div className="panel" style={{ padding: 16 }}>
+                  <div style={{ fontWeight: 700, marginBottom: 8 }}>Request a follow-up</div>
+                  <div className="muted" style={{ lineHeight: 1.65 }}>Send your results to 2Nspira and request a strengths-based coaching or advisory follow-up.</div>
+                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 16 }}>
+                    <a className="button-primary" href={reportRequestHref}>Email me my follow-up</a>
+                  </div>
+                </div>
+                <div className="panel" style={{ padding: 16 }}>
+                  <div style={{ fontWeight: 700, marginBottom: 8 }}>Talk with 2Nspira</div>
+                  <div className="muted" style={{ lineHeight: 1.65 }}>Use your profile results as the starting point for a coaching, leadership, or role-fit conversation.</div>
+                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 16 }}>
+                    <a className="button-primary" href={contactHref}>Talk with 2Nspira</a>
+                    <button className="button-secondary" onClick={() => window.print()}>Print / Save</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
