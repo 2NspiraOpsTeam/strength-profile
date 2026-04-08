@@ -175,7 +175,7 @@ export default function StrengthProfileApp() {
                 <p className="muted" style={{ fontSize: 18, lineHeight: 1.85, maxWidth: 760 }}>{BRAND.subtagline}</p>
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 28 }}>
                   <button className="button-primary" onClick={() => setStarted(true)}>{BRAND.ctaPrimary}</button>
-                  <a className="button-secondary" href="#how-it-works">{BRAND.ctaSecondary}</a>
+                  <a className="button-secondary" href="#methodology">{BRAND.ctaSecondary}</a>
                 </div>
               </div>
               <div className="panel" style={{ padding: 24 }}>
@@ -199,6 +199,13 @@ export default function StrengthProfileApp() {
             <StatCard label="Assessment length" value="24 Questions" helper="Short enough to complete quickly, long enough to reveal meaningful operating patterns." />
             <StatCard label="Output" value="Top 5 Strengths" helper="Returns your Top 5 Natural Operating Strengths with a deeper work-fit profile." />
             <StatCard label="Best for" value="Professionals" helper="Useful for self-awareness, role fit, career reflection, and leadership conversations." />
+          </div>
+
+          <div id="methodology" className="panel" style={{ padding: 24 }}>
+            <div className="eyebrow">Methodology & 2Nspira perspective</div>
+            <p style={{ margin: '14px 0 0', lineHeight: 1.8, maxWidth: 980 }}>
+              This assessment is designed to identify natural operating strengths in a professional context. It focuses on how people naturally create value, how they work with others, what energizes them, and where they are most likely to thrive.
+            </p>
           </div>
 
           <ProfileInputStep profileInput={profileInput} setProfileInput={setProfileInput} />
@@ -295,7 +302,7 @@ export default function StrengthProfileApp() {
               <p className="muted" style={{ marginTop: 0, lineHeight: 1.75 }}>{managerGuidance}</p>
             </div>
             <div className="panel" style={{ padding: 24 }}>
-              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 14 }}>2Nspira follow-up</div>
+              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 14 }}>2Nspira next step</div>
               <p className="muted" style={{ margin: 0, lineHeight: 1.75 }}>Use your profile as a starting point for role-fit reflection, manager conversations, coaching, or team development work.</p>
               <div className="two-col" style={{ marginTop: 18 }}>
                 <div className="panel" style={{ padding: 16 }}>
