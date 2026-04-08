@@ -4,19 +4,83 @@ import { useEffect, useMemo, useState } from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { BRAND } from '@/lib/brand-config';
 import { ASSESSMENT_SECTIONS, SCALE_OPTIONS } from '@/lib/assessment-config';
-import { getCollaborationStyle, getEnergyDrivers, getFrictionZones, getWorkFit, scoreAssessment } from '@/lib/scoring';
+import { CAREER_STAGE_OPTIONS, ROLE_OPTIONS, WORK_CONTEXT_OPTIONS } from '@/lib/profile-input-config';
+import {
+  generateManagerGuidance,
+  generatePersonalizedSummary,
+  getCollaborationStyle,
+  getEnergyDrivers,
+  getFrictionZones,
+  getWorkFit,
+  scoreAssessment,
+} from '@/lib/scoring';
 import { Pill, SectionHeader, StatCard } from '@/components/ui';
 
 const STORAGE_KEY = 'strength-profile-v1';
+const EMPTY_PROFILE = {
+  name: '',
+  role: '',
+  careerStage: '',
+  workContext: '',
+  email: '',
+};
 
-function getInitialResponses() {
-  if (typeof window === 'undefined') return {};
+function getInitialState() {
+  if (typeof window === 'undefined') return { responses: {}, profileInput: EMPTY_PROFILE };
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return { responses: {}, profileInput: EMPTY_PROFILE };
+    const parsed = JSON.parse(raw);
+    return {
+      responses: parsed.responses || {},
+      profileInput: { ...EMPTY_PROFILE, ...(parsed.profileInput || {}) },
+    };
   } catch {
-    return {};
+    return { responses: {}, profileInput: EMPTY_PROFILE };
   }
+}
+
+function ProfileInputStep({ profileInput, setProfileInput }) {
+  function update(field, value) {
+    setProfileInput((current) => ({ ...current, [field]: value }));
+  }
+
+  return (
+    <div className="card" style={{ padding: 24 }}>
+      <SectionHeader eyebrow="Profile context" title="Add a little context" description="This helps make your result feel more personal, relevant, and useful in real work conversations." />
+      <div className="three-col" style={{ marginTop: 20 }}>
+        <div className="panel" style={{ padding: 16 }}>
+          <div style={{ fontWeight: 700, marginBottom: 8 }}>Name</div>
+          <input value={profileInput.name} onChange={(e) => update('name', e.target.value)} placeholder="Your name" style={{ width: '100%', minHeight: 46, borderRadius: 12, border: '1px solid rgba(148,163,184,0.24)', background: 'rgba(255,255,255,0.04)', color: '#edf2ff', padding: '0 14px' }} />
+        </div>
+        <div className="panel" style={{ padding: 16 }}>
+          <div style={{ fontWeight: 700, marginBottom: 8 }}>Role</div>
+          <select value={profileInput.role} onChange={(e) => update('role', e.target.value)} style={{ width: '100%', minHeight: 46, borderRadius: 12, border: '1px solid rgba(148,163,184,0.24)', background: '#0e1728', color: '#edf2ff', padding: '0 14px' }}>
+            <option value="">Select role</option>
+            {ROLE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+          </select>
+        </div>
+        <div className="panel" style={{ padding: 16 }}>
+          <div style={{ fontWeight: 700, marginBottom: 8 }}>Career stage</div>
+          <select value={profileInput.careerStage} onChange={(e) => update('careerStage', e.target.value)} style={{ width: '100%', minHeight: 46, borderRadius: 12, border: '1px solid rgba(148,163,184,0.24)', background: '#0e1728', color: '#edf2ff', padding: '0 14px' }}>
+            <option value="">Select stage</option>
+            {CAREER_STAGE_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+          </select>
+        </div>
+        <div className="panel" style={{ padding: 16 }}>
+          <div style={{ fontWeight: 700, marginBottom: 8 }}>Work context</div>
+          <select value={profileInput.workContext} onChange={(e) => update('workContext', e.target.value)} style={{ width: '100%', minHeight: 46, borderRadius: 12, border: '1px solid rgba(148,163,184,0.24)', background: '#0e1728', color: '#edf2ff', padding: '0 14px' }}>
+            <option value="">Select work context</option>
+            {WORK_CONTEXT_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+          </select>
+        </div>
+        <div className="panel" style={{ padding: 16 }}>
+          <div style={{ fontWeight: 700, marginBottom: 8 }}>Email (optional)</div>
+          <input value={profileInput.email} onChange={(e) => update('email', e.target.value)} placeholder="name@example.com" style={{ width: '100%', minHeight: 46, borderRadius: 12, border: '1px solid rgba(148,163,184,0.24)', background: 'rgba(255,255,255,0.04)', color: '#edf2ff', padding: '0 14px' }} />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function QuestionCard({ question, value, onChange }) {
@@ -42,17 +106,20 @@ function QuestionCard({ question, value, onChange }) {
 export default function StrengthProfileApp() {
   const [started, setStarted] = useState(false);
   const [responses, setResponses] = useState({});
+  const [profileInput, setProfileInput] = useState(EMPTY_PROFILE);
   const [currentStep, setCurrentStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
-    setResponses(getInitialResponses());
+    const initial = getInitialState();
+    setResponses(initial.responses || {});
+    setProfileInput(initial.profileInput || EMPTY_PROFILE);
   }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
-  }, [responses]);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ responses, profileInput }));
+  }, [responses, profileInput]);
 
   const currentSection = ASSESSMENT_SECTIONS[currentStep];
   const isLastStep = currentStep === ASSESSMENT_SECTIONS.length - 1;
@@ -65,6 +132,8 @@ export default function StrengthProfileApp() {
   const frictionZones = useMemo(() => getFrictionZones(results), [results]);
   const collaborationStyle = useMemo(() => getCollaborationStyle(results), [results]);
   const workFit = useMemo(() => getWorkFit(results), [results]);
+  const personalizedSummary = useMemo(() => generatePersonalizedSummary(results, profileInput), [results, profileInput]);
+  const managerGuidance = useMemo(() => generateManagerGuidance(results), [results]);
 
   function updateResponse(questionId, value) {
     setResponses((current) => ({ ...current, [questionId]: value }));
@@ -113,6 +182,8 @@ export default function StrengthProfileApp() {
             <StatCard label="Output" value="Top 5 Strengths" helper="Returns your Top 5 Natural Operating Strengths with a deeper work-fit profile." />
             <StatCard label="Best for" value="Professionals" helper="Useful for self-awareness, role fit, career reflection, and leadership conversations." />
           </div>
+
+          <ProfileInputStep profileInput={profileInput} setProfileInput={setProfileInput} />
         </div>
       </div>
     );
@@ -120,7 +191,7 @@ export default function StrengthProfileApp() {
 
   if (showResults) {
     const chartData = results.dimensions.map((item) => ({ subject: item.shortTitle, score: item.score }));
-    const contactHref = `mailto:${BRAND.contactEmail}?subject=${encodeURIComponent(BRAND.contactSubject)}&body=${encodeURIComponent(`Hello 2Nspira,\n\nI completed the Strength Profile and would like to discuss my results.\n\nPrimary Profile: ${results.profile.label}\nOverall Strength Score: ${results.overallScore}\nCollaboration Style: ${collaborationStyle}\n\nPlease follow up with me.\n`)}`;
+    const contactHref = `mailto:${BRAND.contactEmail}?subject=${encodeURIComponent(BRAND.contactSubject)}&body=${encodeURIComponent(`Hello 2Nspira,\n\nI completed the Strength Profile and would like to discuss my results.\n\nName: ${profileInput.name || ''}\nRole: ${profileInput.role || ''}\nCareer Stage: ${profileInput.careerStage || ''}\nWork Context: ${profileInput.workContext || ''}\nEmail: ${profileInput.email || ''}\nPrimary Profile: ${results.profile.label}\nOverall Strength Score: ${results.overallScore}\nCollaboration Style: ${collaborationStyle}\n\nPlease follow up with me.\n`)}`;
 
     return (
       <div className="page-shell">
@@ -130,8 +201,14 @@ export default function StrengthProfileApp() {
             <button className="button-secondary" onClick={() => setShowResults(false)}>Back to assessment</button>
           </div>
 
+          <div className="three-col">
+            <StatCard label="Name" value={profileInput.name || 'Not provided'} helper={profileInput.role || 'Role not provided'} />
+            <StatCard label="Career stage" value={profileInput.careerStage || 'Not provided'} helper={profileInput.workContext || 'Work context not provided'} />
+            <StatCard label="Top profile" value={results.profile.label} helper="Your strongest overall work-fit signature." />
+          </div>
+
           <div className="card" style={{ padding: 28 }}>
-            <SectionHeader eyebrow={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: '50%' }} />Your professional strengths profile</span>} title="Your Top 5 Natural Operating Strengths" description={results.profile.summary} actions={<Pill tone="green">Overall Score {results.overallScore}</Pill>} />
+            <SectionHeader eyebrow={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: '50%' }} />Your professional strengths profile</span>} title="Your Top 5 Natural Operating Strengths" description={personalizedSummary} actions={<Pill tone="green">Overall Score {results.overallScore}</Pill>} />
             <div className="two-col" style={{ marginTop: 22, alignItems: 'center' }}>
               <div className="three-col">
                 <StatCard label="Collaboration style" value={collaborationStyle.split(' — ')[0]} helper={collaborationStyle} />
@@ -164,9 +241,7 @@ export default function StrengthProfileApp() {
               <div className="grid">
                 {results.strongest.map((item, index) => (
                   <div key={item.id} className="panel" style={{ padding: 16, display: 'grid', gridTemplateColumns: '56px 1fr', gap: 14, alignItems: 'center' }}>
-                    <div style={{ width: 56, height: 56, borderRadius: 18, display: 'grid', placeItems: 'center', background: 'rgba(139,125,255,0.14)', fontSize: 22, fontWeight: 700, color: '#efeaff' }}>
-                      {index + 1}
-                    </div>
+                    <div style={{ width: 56, height: 56, borderRadius: 18, display: 'grid', placeItems: 'center', background: 'rgba(139,125,255,0.14)', fontSize: 22, fontWeight: 700, color: '#efeaff' }}>{index + 1}</div>
                     <div>
                       <div style={{ fontWeight: 700, fontSize: 17 }}>{item.title}</div>
                       <div className="muted" style={{ marginTop: 4 }}>Strength score: {item.score}</div>
@@ -178,9 +253,7 @@ export default function StrengthProfileApp() {
             <div className="panel" style={{ padding: 24 }}>
               <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 14 }}>Energy drivers</div>
               <ul className="list-clean">
-                {energyDrivers.map((item) => (
-                  <li key={item}><span className="dot" style={{ background: '#8b7dff' }} /><div className="muted">{item}</div></li>
-                ))}
+                {energyDrivers.map((item) => <li key={item}><span className="dot" style={{ background: '#8b7dff' }} /><div className="muted">{item}</div></li>)}
               </ul>
             </div>
           </div>
@@ -189,14 +262,14 @@ export default function StrengthProfileApp() {
             <div className="panel" style={{ padding: 24 }}>
               <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 14 }}>Friction zones</div>
               <ul className="list-clean">
-                {frictionZones.map((item) => (
-                  <li key={item}><span className="dot" style={{ background: '#f6c66b' }} /><div className="muted">{item}</div></li>
-                ))}
+                {frictionZones.map((item) => <li key={item}><span className="dot" style={{ background: '#f6c66b' }} /><div className="muted">{item}</div></li>)}
               </ul>
             </div>
             <div className="panel" style={{ padding: 24 }}>
               <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>How you naturally create value</div>
               <p className="muted" style={{ marginTop: 0, lineHeight: 1.75 }}>{results.profile.summary}</p>
+              <div style={{ fontWeight: 700, fontSize: 18, marginTop: 18, marginBottom: 8 }}>Manager / team guidance</div>
+              <p className="muted" style={{ marginTop: 0, lineHeight: 1.75 }}>{managerGuidance}</p>
               <div style={{ fontWeight: 700, fontSize: 18, marginTop: 18, marginBottom: 14 }}>2Nspira follow-up</div>
               <p className="muted" style={{ margin: 0, lineHeight: 1.75 }}>Use your profile as a starting point for role-fit reflection, manager conversations, coaching, or team development work.</p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 18 }}>
@@ -213,6 +286,8 @@ export default function StrengthProfileApp() {
   return (
     <div className="page-shell">
       <div className="container grid" style={{ gap: 22 }}>
+        <ProfileInputStep profileInput={profileInput} setProfileInput={setProfileInput} />
+
         <div className="card" style={{ padding: 24 }}>
           <SectionHeader eyebrow={`Assessment section ${currentStep + 1} of ${ASSESSMENT_SECTIONS.length}`} title={currentSection.title} description={currentSection.description} actions={<Pill tone="blue">{progress}% complete</Pill>} />
           <div style={{ marginTop: 20 }}>
@@ -234,9 +309,7 @@ export default function StrengthProfileApp() {
         </div>
 
         <div className="grid">
-          {currentSection.questions.map((question) => (
-            <QuestionCard key={question.id} question={question} value={responses[question.id]} onChange={updateResponse} />
-          ))}
+          {currentSection.questions.map((question) => <QuestionCard key={question.id} question={question} value={responses[question.id]} onChange={updateResponse} />)}
         </div>
 
         <div className="card" style={{ padding: 20 }}>
