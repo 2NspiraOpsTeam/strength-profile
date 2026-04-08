@@ -77,9 +77,11 @@ export default function StrengthProfileApp() {
           <div className="card" style={{ padding: 28 }}>
             <div className="hero-grid" style={{ alignItems: 'center' }}>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                  <img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 42, height: 42, objectFit: 'contain' }} />
-                  <div className="eyebrow">{BRAND.company}</div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+                    <img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 88, height: 88, objectFit: 'cover', borderRadius: '50%' }} />
+                    <div className="eyebrow">{BRAND.company}</div>
+                  </div>
                 </div>
                 <h1 className="hero-title">{BRAND.product}</h1>
                 <div className="badge" style={{ background: 'rgba(78,227,193,0.12)', color: '#c9fff4', marginBottom: 14 }}>{BRAND.tagline}</div>
@@ -129,7 +131,7 @@ export default function StrengthProfileApp() {
           </div>
 
           <div className="card" style={{ padding: 28 }}>
-            <SectionHeader eyebrow={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 28, height: 28, objectFit: 'contain' }} />Your professional strengths profile</span>} title="Your Top 5 Natural Operating Strengths" description={results.profile.summary} actions={<Pill tone="green">Overall Score {results.overallScore}</Pill>} />
+            <SectionHeader eyebrow={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: '50%' }} />Your professional strengths profile</span>} title="Your Top 5 Natural Operating Strengths" description={results.profile.summary} actions={<Pill tone="green">Overall Score {results.overallScore}</Pill>} />
             <div className="two-col" style={{ marginTop: 22, alignItems: 'center' }}>
               <div className="three-col">
                 <StatCard label="Collaboration style" value={collaborationStyle.split(' — ')[0]} helper={collaborationStyle} />
@@ -137,7 +139,10 @@ export default function StrengthProfileApp() {
                 <StatCard label="Best-fit work" value="Work-fit" helper={workFit} />
               </div>
               <div className="panel" style={{ padding: 20, minHeight: 320 }}>
-                <div style={{ fontWeight: 700, marginBottom: 14 }}>Strength pattern</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
+                  <div style={{ fontWeight: 700 }}>Strength pattern</div>
+                  <div className="badge" style={{ background: 'rgba(139,125,255,0.12)', color: '#efeaff' }}>{results.profile.label}</div>
+                </div>
                 <ResponsiveContainer width="100%" height={260}>
                   <RadarChart outerRadius="72%" data={chartData}>
                     <PolarGrid stroke="rgba(148,163,184,0.22)" />
