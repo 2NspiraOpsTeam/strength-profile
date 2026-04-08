@@ -108,7 +108,7 @@ export default function StrengthProfileApp() {
 
           <div id="how-it-works" className="three-col">
             <StatCard label="Assessment length" value="24 Questions" helper="Short enough to complete quickly, long enough to reveal meaningful operating patterns." />
-            <StatCard label="Output" value="Operating Strengths Profile" helper="Returns a work-oriented profile, energy drivers, friction zones, and collaboration guidance." />
+            <StatCard label="Output" value="Top 5 Strengths" helper="Returns your Top 5 Natural Operating Strengths with a deeper work-fit profile." />
             <StatCard label="Best for" value="Professionals" helper="Useful for self-awareness, role fit, career reflection, and leadership conversations." />
           </div>
         </div>
@@ -129,7 +129,7 @@ export default function StrengthProfileApp() {
           </div>
 
           <div className="card" style={{ padding: 28 }}>
-            <SectionHeader eyebrow={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 28, height: 28, objectFit: 'contain' }} />Your professional strengths profile</span>} title={results.profile.label} description={results.profile.summary} actions={<Pill tone="green">Overall Score {results.overallScore}</Pill>} />
+            <SectionHeader eyebrow={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}><img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 28, height: 28, objectFit: 'contain' }} />Your professional strengths profile</span>} title="Your Top 5 Natural Operating Strengths" description={results.profile.summary} actions={<Pill tone="green">Overall Score {results.overallScore}</Pill>} />
             <div className="two-col" style={{ marginTop: 22, alignItems: 'center' }}>
               <div className="three-col">
                 <StatCard label="Collaboration style" value={collaborationStyle.split(' — ')[0]} helper={collaborationStyle} />
@@ -152,12 +152,23 @@ export default function StrengthProfileApp() {
 
           <div className="two-col">
             <div className="panel" style={{ padding: 24 }}>
-              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 14 }}>Top strengths</div>
-              <ul className="list-clean">
-                {results.strongest.map((item) => (
-                  <li key={item.id}><span className="dot" style={{ background: '#4ee3c1' }} /><div><div style={{ fontWeight: 600 }}>{item.title}</div><div className="muted">Score: {item.score}</div></div></li>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
+                <div style={{ fontWeight: 700, fontSize: 18 }}>Top 5 Natural Operating Strengths</div>
+                <Pill tone="gold">{results.profile.label}</Pill>
+              </div>
+              <div className="grid">
+                {results.strongest.map((item, index) => (
+                  <div key={item.id} className="panel" style={{ padding: 16, display: 'grid', gridTemplateColumns: '56px 1fr', gap: 14, alignItems: 'center' }}>
+                    <div style={{ width: 56, height: 56, borderRadius: 18, display: 'grid', placeItems: 'center', background: 'rgba(139,125,255,0.14)', fontSize: 22, fontWeight: 700, color: '#efeaff' }}>
+                      {index + 1}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: 17 }}>{item.title}</div>
+                      <div className="muted" style={{ marginTop: 4 }}>Strength score: {item.score}</div>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
             <div className="panel" style={{ padding: 24 }}>
               <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 14 }}>Energy drivers</div>
@@ -179,7 +190,9 @@ export default function StrengthProfileApp() {
               </ul>
             </div>
             <div className="panel" style={{ padding: 24 }}>
-              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 14 }}>2Nspira follow-up</div>
+              <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>How you naturally create value</div>
+              <p className="muted" style={{ marginTop: 0, lineHeight: 1.75 }}>{results.profile.summary}</p>
+              <div style={{ fontWeight: 700, fontSize: 18, marginTop: 18, marginBottom: 14 }}>2Nspira follow-up</div>
               <p className="muted" style={{ margin: 0, lineHeight: 1.75 }}>Use your profile as a starting point for role-fit reflection, manager conversations, coaching, or team development work.</p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 18 }}>
                 <a className="button-primary" href={contactHref}>Talk with 2Nspira</a>
