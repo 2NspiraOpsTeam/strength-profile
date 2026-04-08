@@ -126,6 +126,8 @@ export default function StrengthProfileApp() {
   const [profileInput, setProfileInput] = useState(EMPTY_PROFILE);
   const [currentStep, setCurrentStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const [singleQuestionMode, setSingleQuestionMode] = useState(true);
+  const [questionIndex, setQuestionIndex] = useState(0);
 
   useEffect(() => {
     const initial = getInitialState();
@@ -140,6 +142,7 @@ export default function StrengthProfileApp() {
 
   const currentSection = ASSESSMENT_SECTIONS[currentStep];
   const isLastStep = currentStep === ASSESSMENT_SECTIONS.length - 1;
+  const visibleQuestions = singleQuestionMode ? [currentSection.questions[Math.min(questionIndex, currentSection.questions.length - 1)]].filter(Boolean) : currentSection.questions;
   const totalQuestions = ASSESSMENT_SECTIONS.reduce((sum, section) => sum + section.questions.length, 0);
   const answeredQuestions = Object.keys(responses).length;
   const progress = Math.round((answeredQuestions / totalQuestions) * 100);
@@ -335,6 +338,14 @@ export default function StrengthProfileApp() {
 
         <div className="card" style={{ padding: 24 }}>
           <SectionHeader eyebrow={`Assessment section ${currentStep + 1} of ${ASSESSMENT_SECTIONS.length}`} title={currentSection.title} description={currentSection.description} actions={<Pill tone="blue">{progress}% complete</Pill>} />
+          <div className="panel" style={{ padding: 16, marginTop: 18 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+              <div className="muted" style={{ lineHeight: 1.6 }}>Use focus mode for a cleaner mobile experience, or expand to view the full section at once.</div>
+              <button className="button-ghost" type="button" onClick={() => setSingleQuestionMode((v) => !v)}>
+                {singleQuestionMode ? 'Show full section' : 'Focus mode'}
+              </button>
+            </div>
+          </div>
           <div style={{ marginTop: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}><div className="muted">Overall progress</div><div>{answeredQuestions} / {totalQuestions}</div></div>
             <div className="progress-bar"><span style={{ width: `${progress}%` }} /></div>
@@ -353,14 +364,34 @@ export default function StrengthProfileApp() {
           </div>
         </div>
 
-        <div className="grid">{currentSection.questions.map((question) => <QuestionCard key={question.id} question={question} value={responses[question.id]} onChange={updateResponse} />)}</div>
+        {singleQuestionMode ? <div className="panel" style={{ padding: 18 }}><div className="eyebrow">Focused question mode</div><div style={{ marginTop: 12, fontWeight: 700 }}>Question {questionIndex + 1} of {currentSection.questions.length}</div></div> : null}
+
+        <div className="grid">{visibleQuestions.map((question) => <QuestionCard key={question.id} question={question} value={responses[question.id]} onChange={updateResponse} />)}</div>
 
         <div className="card" style={{ padding: 20 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
             <div className="muted" style={{ maxWidth: 720, lineHeight: 1.7 }}>This assessment is designed to reflect your natural work patterns, not just your technical skills or job title.</div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <button className="button-ghost" onClick={() => setCurrentStep((step) => Math.max(step - 1, 0))} disabled={currentStep === 0}>Previous</button>
-              <button className="button-primary" onClick={() => isLastStep ? setShowResults(true) : setCurrentStep((step) => Math.min(step + 1, ASSESSMENT_SECTIONS.length - 1))}>{isLastStep ? 'View Results' : 'Next Section'}</button>
+              <button className="button-ghost" onClick={() => {
+                if (singleQuestionMode && questionIndex > 0) {
+                  setQuestionIndex((value) => Math.max(value - 1, 0));
+                  return;
+                }
+                setCurrentStep((step) => Math.max(step - 1, 0));
+                setQuestionIndex(0);
+              }} disabled={currentStep === 0 && questionIndex === 0}>Previous</button>
+              <button className="button-primary" onClick={() => {
+                if (singleQuestionMode && questionIndex < currentSection.questions.length - 1) {
+                  setQuestionIndex((value) => value + 1);
+                  return;
+                }
+                if (isLastStep) {
+                  setShowResults(true);
+                  return;
+                }
+                setCurrentStep((step) => Math.min(step + 1, ASSESSMENT_SECTIONS.length - 1));
+                setQuestionIndex(0);
+              }}>{isLastStep && (!singleQuestionMode || questionIndex === currentSection.questions.length - 1) ? 'View Results' : 'Next'}</button>
             </div>
           </div>
         </div>
