@@ -167,12 +167,19 @@ export default function StrengthProfileApp() {
           <div className="card" style={{ padding: 28 }}>
             <div className="hero-grid" style={{ alignItems: 'center' }}>
               <div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-                    <img src="/2nspira-logo.png" alt="2Nspira logo" style={{ width: 88, height: 88, objectFit: 'cover', borderRadius: '50%' }} />
+                <a
+                  className="brand-link"
+                  href={BRAND.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Visit the 2Nspira website"
+                >
+                  <img src="/2nspira-logo.png" alt="2Nspira logo" className="brand-mark" />
+                  <div className="brand-meta">
                     <div className="eyebrow">{BRAND.company}</div>
+                    <div className="brand-kicker">Visit 2Nspira.com</div>
                   </div>
-                </div>
+                </a>
                 <h1 className="hero-title">{BRAND.product}</h1>
                 <div className="badge" style={{ background: 'rgba(78,227,193,0.12)', color: '#c9fff4', marginBottom: 14 }}>{BRAND.tagline}</div>
                 <p className="muted" style={{ fontSize: 18, lineHeight: 1.85, maxWidth: 760 }}>{BRAND.subtagline}</p>
