@@ -13,8 +13,8 @@ export default function RootLayout({ children }) {
           <a className="site-logo-link" href="https://2nspira.com/" aria-label="Return to the 2Nspira home page">
             <img
               className="site-logo"
-              src="/2nspira-logo-with-tagline.png"
-              alt="2Nspira — Inspiration. Innovation. Impact."
+              src="/2nspira-logo-wordmark.png"
+              alt="2Nspira"
               width="320"
               height="132"
             />
