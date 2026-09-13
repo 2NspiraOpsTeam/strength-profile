@@ -19,6 +19,10 @@ body {
 }
 button, input, select { font: inherit; }
 button { cursor: pointer; }
+.site-header { display: flex; align-items: center; min-height: 84px; padding: 10px 20px; background: #fff; border-bottom: 1px solid rgba(15, 23, 42, 0.12); }
+.site-logo-link { display: inline-flex; align-items: center; border-radius: 8px; }
+.site-logo-link:focus-visible { outline: 3px solid var(--primary); outline-offset: 4px; }
+.site-logo { display: block; width: 160px; height: auto; }
 .page-shell { min-height: 100vh; padding: 24px 14px 64px; }
 .container { max-width: 1200px; margin: 0 auto; }
 .card { background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(10, 18, 34, 0.94)); border: 1px solid var(--line); border-radius: 28px; box-shadow: var(--shadow); }
