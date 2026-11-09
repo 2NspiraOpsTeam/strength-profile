@@ -6,5 +6,12 @@
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page"
-  }
+  },
+  "routes": [
+    {
+      "pattern": "strength.2nspira.com",
+      "custom_domain": true,
+      "zone_id": "d92793c6efbc5cd4c115247ff2650b48"
+    }
+  ]
 }
