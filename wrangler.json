@@ -1,0 +1,10 @@
+{
+  "name": "strength-profile",
+  "account_id": "36a7807b2d8726b889873bab8b572113",
+  "compatibility_date": "2026-11-09",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
