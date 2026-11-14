@@ -37,7 +37,7 @@ All dimensions currently have three questions. Rating mapping is 1→0, 2→25, 
 
 `getInitialState` catches malformed JSON/read failures but does not validate response/profile shapes or types. A truthy malformed stored response value can leak into scoring; non-string `name` can fail `.trim()`. The persistence effect writes to localStorage without exception handling. Reading and writing in separate mount effects means the write initially observes defaults before restored state is applied; Strict Mode/browser behavior requires explicit hydration tests before claiming reliable restoration. Do not present this as proven user-data loss without a rendered reproduction.
 
-Only responses/context are persisted, not navigation or result-view state. Refresh begins at the landing view with restored answers rather than restoring the same result step. Retake returns to assessment with previous answers; it is currently edit/review, not a clean new attempt. Make those semantics explicit.
+Only responses/context are persisted, not navigation or result-view state. Refresh begins at the landing view with restored answers rather than restoring the same result step. The “Back to assessment” control returns with previous answers; it is edit/review, not a clean new attempt. There is no explicit fresh-retake/reset control. Make those semantics explicit.
 
 ### Required implementation behavior
 
