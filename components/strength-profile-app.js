@@ -179,14 +179,14 @@ export default function StrengthProfileApp() {
                 </div>
               </div>
               <div className="panel" style={{ padding: 24 }}>
-                <div className="eyebrow">Professional strengths and work-fit assessment</div>
+                <div className="eyebrow">What you leave with</div>
                 <ul className="list-clean" style={{ marginTop: 16 }}>
                   {[
-                    'Identify your natural operating strengths',
-                    'Understand what kinds of work give you energy',
-                    'See how you naturally collaborate and contribute',
-                    'Learn where you are most likely to thrive professionally',
-                    'Get a practical strengths and work-fit profile',
+                    'A clear read on how you naturally contribute at work',
+                    'Stronger language for the work that energizes you',
+                    'A practical view of how you tend to collaborate and add value',
+                    'Better signals for role fit, growth, and leadership conversations',
+                    'A strengths profile you can actually use after the assessment',
                   ].map((item) => (
                     <li key={item}><span className="dot" style={{ background: '#8b7dff' }} /><div className="muted" style={{ lineHeight: 1.65 }}>{item}</div></li>
                   ))}
@@ -196,15 +196,15 @@ export default function StrengthProfileApp() {
           </div>
 
           <div id="how-it-works" className="three-col">
-            <StatCard label="Assessment length" value="24 Questions" helper="Short enough to complete quickly, long enough to reveal meaningful operating patterns." />
-            <StatCard label="Output" value="Top 5 Strengths" helper="Returns your Top 5 Natural Operating Strengths with a deeper work-fit profile." />
-            <StatCard label="Best for" value="Professionals" helper="Useful for self-awareness, role fit, career reflection, and leadership conversations." />
+            <StatCard label="Time commitment" value="24 Questions" helper="Built to be completed in one sitting without turning into a long personality exercise." />
+            <StatCard label="What you get" value="Top 5 Strengths" helper="A practical profile of your strongest patterns, work-fit signals, and contribution style." />
+            <StatCard label="Best used for" value="Career clarity" helper="Useful for role fit, self-awareness, manager conversations, and leadership development." />
           </div>
 
           <div id="methodology" className="panel" style={{ padding: 24 }}>
-            <div className="eyebrow">Methodology & 2Nspira perspective</div>
+            <div className="eyebrow">How 2Nspira approaches this</div>
             <p style={{ margin: '14px 0 0', lineHeight: 1.8, maxWidth: 980 }}>
-              This assessment is designed to identify natural operating strengths in a professional context. It focuses on how people naturally create value, how they work with others, what energizes them, and where they are most likely to thrive.
+              This assessment focuses on professional patterns, not abstract personality labels. It looks at how you naturally create value, how you work with other people, what tends to energize you, and what kind of environment is most likely to bring out your best work.
             </p>
           </div>
 
